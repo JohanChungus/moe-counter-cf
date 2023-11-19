@@ -1,15 +1,16 @@
-name = "moe-counter-cf"
-type = "javascript"
-account_id = "<CF_ACCOUNT_ID>"
-zone_id = "<CF_ZONE_ID>"
-workers_dev = false
-route = "<YOUR_DOMAIN>/*"
-compatibility_date = "2022-03-12"
-kv_namespaces = [
-  { binding = "KV", id = "<CF_KV_ID>", preview_id = "<CF_PREVIEW_KV_ID>" },
-]
+name: Deploy
 
-[build]
-command = "npm run build"
-[build.upload]
-format = "service-worker"
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      - uses: actions/checkout@v3
+      - name: Deploy
+        uses: cloudflare/wrangler-action@v1
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
